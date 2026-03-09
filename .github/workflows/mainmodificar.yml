@@ -6,19 +6,26 @@ on:
       - main
 
 jobs:
-  ModificaRepositoriGithubAmbGithubActions_ElTeuNom:
+  ModificaRepositoriGithubAmbGithubActions_DiegoMayPer:
     runs-on: ubuntu-latest
-    permissions: # per poder modificar el contingut del repositori
+    permissions: 
       contents: write
     steps:
       - uses: actions/checkout@v6
-      - name: Modifica fitxer md
+
+      - name: Modifica README.md
         run: |
-          echo -e "- ${{ github.actor }} modifica el repo ${{ github.repository }} : "`date`"\n" >> README.md
+          echo "- ${{ github.actor }} modifica el repo ${{ github.repository }} : "`date`"\n" >> README.md
+
+      - name: Modifica index.html
+        run: |
+          # Afegim un item a la llista dins <ul> amb la data
+          sed -i '/<ul>/a <li>Modificat per ${{ github.actor }} el `date`</li>' index.html
+
       - name: commit i push
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git add --all
-          git commit -m "Afegit contingut a README.md"
+          git commit -m "Afegit contingut al README.md i index.html"
           git push
